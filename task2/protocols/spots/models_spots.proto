@@ -1,0 +1,43 @@
+syntax = "proto3";
+package spots.models;
+
+option go_package = "protocols/spots";
+
+//  rpc ListSpotsNearPoint(models.ListSpotsNearPointRequest) returns(models.ListSpotsNearPointResponse);
+
+// ArtworkTokenIdRequest is request model
+// for ListSpotsNearPoint
+message ListSpotsNearPointRequest {
+  double    longitude   = 1;
+  double    latitude    = 2;
+  float     length      = 3;
+  QueryType search_type = 4;
+}
+
+// ChangeArtworkTokenIdRequest is request model
+// for ListSpotsNearPoint
+message ListSpotsNearPointResponse {
+  repeated Spot spots   = 1;
+  int64         total   = 2;
+}
+
+// Spot model
+message Spot {
+  string name          = 1;
+  float  rating        = 2;
+  string website       = 3;
+  string description   = 4;
+  string coordinate    = 5;
+  string uuid          = 6;
+}
+
+// QueryType - how do we search - in circle or in square
+enum QueryType {
+  QUERY_TYPE_INVALID = 0;
+  QUERY_TYPE_CIRCLE  = 1;
+  QUERY_TYPE_SQUARE  = 2;
+}
+
+// Empty is just empty message
+// that could return error
+message Empty {}

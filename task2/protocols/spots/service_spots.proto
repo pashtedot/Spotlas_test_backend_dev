@@ -1,0 +1,13 @@
+syntax = "proto3";
+package spots.service;
+
+option go_package = "protocols/spots";
+
+import "models_spots.proto";
+
+// CloseSpotsService is GRPC server implementation
+// for close-spots-service service
+service CloseSpotsService {
+  // ListSpotsNearPoint returns a list of spots around the location
+  rpc ListSpotsNearPoint(models.ListSpotsNearPointRequest) returns(models.ListSpotsNearPointResponse);
+}

@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  spots_db:
+    image: postgis/postgis:12-3.1
+    container_name: spots_db
+    restart: always
+    ports:
+      - 45678:5432
+    volumes:
+      - ./data/db/volumes/spots_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: spots_db_pass
+      POSTGRES_USER: spots_db_user
+      POSTGRES_DB: spots_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  spots_db-migrate:
+    image: migrate/migrate
+    container_name: spots_db-migrate
+    volumes:
+      - ./db:/db
+    depends_on:
+      spots_db:
+        condition: service_healthy
+
+    command: ["-path=/db/", "-database", "postgresql://spots_db_user:spots_db_pass@spots_db:5432/spots_db?sslmode=disable", "up"]
